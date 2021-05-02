@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "name": "techgems",
+  "private": true,
+  "scripts": {
+    "buildcss": "postcss 'Styles/site.css' -o 'public/css/site.min.css'"
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.8.6",
+    "tailwindcss": "^2.0.2",
+    "postcss": "^8.2.1",
+    "postcss-cli": "^8.3.1"
+  }
+}
