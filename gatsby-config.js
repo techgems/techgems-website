@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: "TechGems",
+    title: "Tech Gems",
   },
   plugins: [
     "gatsby-plugin-postcss",
@@ -14,5 +14,18 @@ module.exports = {
       },
       __key: "pages",
     },
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        extensions: [`.mdx`, `.md`],
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `posts`,
+        path: `${__dirname}/src/posts`,
+      },
+    }
   ],
 };

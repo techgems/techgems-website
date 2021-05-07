@@ -1,0 +1,269 @@
+---
+title: "ASP.NET Core Clean Architecture"
+date: 2020-06-15
+published: true
+---
+
+<div>
+
+## Clean architecture
+
+A clean architecture is the base for a well planned project and should therefore be the priority above all else for the technical staff when it comes to starting a project from scratch.
+
+In the following <a href="https://github.com/Mazekiller/CleanArchitectureBoilerplate">repository</a> you will find my preferred approach to tackle this problem. This comes after much reading and investigation, as well as personal experience and failed attempts.
+
+We will be using ASP.NET Core 3 for this example, along with Fluent Validations, Dapper and Swagger. We will not implement nor specify anything regarding authentication nor authorization here it's not part of the scope. That will take a different article coming a few months from now.
+
+We will not cover views here since we will be assuming the usage of an SPA, either a typical SPA (React, Angular, Vue) or WASM SPA (Blazor Client in this case).
+
+## Proposed layer structure
+
+The proposed layer structure is:
+
+Models
+Data Access
+Domain
+API
+
+Keeping separate assemblies is important not only for ordering, but also for potential reusability along the way.
+
+
+## Data access with Dapper and Dapper Contrib
+
+I've spoken about dapper before. I've come to enjoy using it much more than entity framework. The general gist is that dapper is faster and allows (in my opinion) a nicer separation of concerns. You also don't need to worry about lazy loading and eager loading and knowing when and how to use them properly. If you want to use database views or stored procedures it is much easier to do in dapper than in entity framework.
+
+This and other reasons are why I chose to use dapper for this sample. Dapper by itself is not all that we can use. There are two solid options with proper support as of 2020. They're <a href="https://dapper-tutorial.net/dapper-contrib">Dapper Contrib</a> and <a href="https://github.com/ericdc1/Dapper.SimpleCRUD">Dapper Simple Crud</a>.
+
+These libraries are important to give dapper the basic operations you will need without having to reimplementing the wheel.
+
+This is what a repository written in dapper looks like with Dapper Contrib
+
+    public List<Person> GetAll()
+    {
+        using (IDbConnection conn = new SqlConnection(ConnectionString))
+        {
+            return conn.Query<Person>("SELECT * FROM Person").AsList();
+        }
+    }
+
+    public Person Create(Person person)
+    {
+        using (IDbConnection conn = new SqlConnection(ConnectionString))
+        {
+            person.Id = Convert.ToInt32(conn.Insert(person));
+            return person;
+        }
+    }
+
+    public Person Update(Person person)
+    {
+        using (IDbConnection conn = new SqlConnection(ConnectionString))
+        {
+            conn.Update(person);
+            return person;
+        }
+    }
+
+    public void Delete(int personId)
+    {
+        using (IDbConnection conn = new SqlConnection(ConnectionString))
+        {
+            conn.Delete(new Person { Id = personId });
+        }
+    }
+
+The model "Person" looks like this:
+
+    [Table("Person")]
+    public class Person
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public int CompanyId { get; set; }
+    }
+
+It is just a simple class that is mapped to. The [Table] decorator can be used on both Dapper SimpleCRUD and Dapper Contrib. In this small exposition we are assuming the use of SQL Server, so we are also assuming that your table names are all in Pascal casing. That makes it easy to not have to define any mappings and just have the actual name of the field be also the name for the properties in the models.
+
+In the postgres edition of this article we will talk about what to do when you can't follow the aforementioned logic. Because this is made assuming the use of SQL Server I support the use of SSDT. If you are unfamiliar with SSDT you can learn more about it <a href="https://www.techgems.net/posts/2020-04-27/practical-database-version-control-in-net-core">here</a>
+
+## Domain, Validations and Models
+
+The heart of the application lies here. The domain, no matter what we are doing, this is the heart of our apps. Because of this, I have come up with some ideas on how to make the domain layer more organized and simple.
+
+Requests and Models
+
+Because we are planning this to use this for an SPA and not in an MVC setting, rather than using ViewModels, we will be using Requests and Models. The differences are very slight, but important.
+
+A Request class is only used to receive data from the client. A model class is a free class that can be used anywhere that it is required, either as a response to return, as part of a Request class or as part of another model that is being used as a response.
+
+Request classes as separate entities to model classes are necessary because of the way we will handle validations of what comes from the client.
+
+Fluent Validations
+
+Normally the default that is used in asp.net core applications is validations of models using Data Annotations. This is useful, but it leaves us with a problem. In order to validate something from the database, we must inject our repositories into our models (please don't ever do this), or do database validations in our Business Logic classes or services.
+
+In that last case, if our database validations are complex, everything will be complex. Fluent Validations come to solve this problem.
+
+    public class PersonCreateValidator : AbstractValidator<PersonCreateRequest>
+    {
+        private readonly IPersonRepository Repository;
+
+        public PersonCreateValidator(IPersonRepository repository)
+        {
+            Repository = repository;
+
+            RuleFor(x => x.Email).EmailAddress().WithMessage("The email is not in the right format.");
+            RuleFor(x => x.Email).Custom((email, context) =>
+            {
+                if (!Repository.IsEmailUnique(email))
+                {
+                    context.AddFailure("The email is not unique.");
+                }
+            });
+        }
+    }
+
+Fluent validations are not specified in the request class. So we don't need to import data access somewhere we don't need it. We can write whatever custom rules for our request classes and we can validate everything we need by using the presets that come with Fluent Validations.
+
+We are essentially decoupling the typical business logic service and making it easier to read and modify in the long run. We also reduce the amount of user exceptions we need to implement by not needing to throw an exception on every failed validation.
+
+Finally we can validate whatever we need from the database before the typical business logic code even gets run. This last part is the most powerful of it all.
+
+Services
+
+Finally, we bind everything together with a service class:
+
+    public class PersonService : IPersonService
+    {
+        private readonly IPersonRepository PersonRepository;
+        private readonly IPersonMapper PersonMapper;
+
+        public PersonService(IPersonRepository repository, IPersonMapper mapper)
+        {
+            PersonRepository = repository;
+            PersonMapper = mapper;
+        }
+
+        public PersonModel Create(PersonCreateRequest request)
+        {
+            var entity = PersonRepository.Create(PersonMapper.MapCreateRequestToEntity(request));
+            return PersonMapper.MapEntityToModel(entity);
+        }
+
+        public List<PersonModel> GetAll()
+        {
+            var PersonList = PersonRepository.GetAll();
+
+            return PersonMapper.MapEntityListToModelList(PersonList);
+        }
+    }
+
+Here we use a mapper class to map from request object to entity, as well as to map an entity to a response model. In the service class we handle the call to whatever service we may need, database operations, sending of emails, loading data in a cache or writing to redis-like stores or even consuming any service of any kind.
+
+Because we do not validate anything here, code tends to be cleaner and simpler. Not to mention that a well written validator will reduce the necessity for custom made exceptions. By using this structure you can outright prevent errors from ever occurring, and that is very powerful.
+
+## Exception management with middleware
+
+So for this part we are using a custom exception handling middleware. This will allow us to bypass the use of try catch blocks in the code for unexpected exceptions (usually in the controller as it was necessary to do in old ASP.NET MVC).
+
+This is an excerpt of the configuration in the startup class where we set up the exception middleware.
+
+    if(env.IsDevelopment())
+    {
+        app.UseMiddleware(typeof(DevelopmentExceptionMiddleware));
+    }
+    else
+    {
+        app.UseMiddleware(typeof(GlobalExceptionMiddleware));
+    }
+
+The function IsDevelopment is one given to us by ASP.NET Core. It uses the environment variable called "ASPNETCORE_ENVIRONMENT" that is setup in the launchSettings.json file. If the value is "development", then the if statement will be true.
+
+We are using here two exception handling middleware classes: *DevelopmentExceptionMiddleware* and *GlobalExceptionMiddleware*. Let's look inside their most important function to see what we can learn from them:
+
+DevelopmentExceptionMiddleware
+
+    private static Task HandleExceptionAsync(HttpContext context, Exception ex)
+    {
+        var returnedErrorMessage = ex.Message;
+        var code = HttpStatusCode.InternalServerError; // 500 if unexpected
+
+        if (ex is NotFoundException) code = HttpStatusCode.NotFound;
+        else if (ex is UnauthorizedException) code = HttpStatusCode.Unauthorized;
+
+        var result = JsonConvert.SerializeObject(new { error = returnedErrorMessage });
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)code;
+        return context.Response.WriteAsync(result);
+    }
+
+Here we are taking every single exception that is not caught by the application and handling it. We are utilizing the unfiltered error message for development, which is a proper thing to do.
+
+Now for GlobalExceptionMiddleware
+
+    private static Task HandleExceptionAsync(HttpContext context, Exception ex)
+    {
+        var returnedErrorMessage = ex.Message;
+        var code = HttpStatusCode.InternalServerError; // 500 if unexpected
+
+        if (ex is NotFoundException) code = HttpStatusCode.NotFound;
+        else if (ex is UnauthorizedException) code = HttpStatusCode.Unauthorized;
+
+        if(code == HttpStatusCode.InternalServerError)
+        {
+            returnedErrorMessage = "A server error has occurred. If this situation continues please contact the administrator.";
+        }
+
+        var result = JsonConvert.SerializeObject(new { error = returnedErrorMessage });
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)code;
+        return context.Response.WriteAsync(result);
+    }
+
+We have an extra if statement that allows us to react properly when there is an uncontrolled exception. That way we don't show the user information the don't require.
+
+## Swagger and API responses
+
+Finally we have the configuration for swagger. Swagger is a great tool for documenting APIs, what they do and how they are supposed to be used. This configuration requires a Nuget package called: <a href="https://www.nuget.org/packages/Swashbuckle.AspNetCore.SwaggerGen/">Swashbuckle.AspNetCore.SwaggerGen</a>
+
+The configuration required once using this package is a fairly simple one. You add the following lines to your configureServices function:
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo()
+            {
+                Version = "v1",
+                Title = "API",
+                Description = "Clean Architecture Boilerplate API",
+                Contact = new OpenApiContact()
+                {
+                    Name = "Carlos Jimenez",
+                    Email = "carlos@techgems.net"
+                },
+                License = new OpenApiLicense()
+                {
+                    Name = "MIT"
+                },
+            });
+        });
+
+        //... More config goes here
+    }
+
+And right after you use the following lines in your configure function:
+
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "Clean Architecture Boilerplate API.");
+    });
+
+I like to call this only for development, since I don't normally want to expose my API documentation to the public, but your use case may vary.
+
+
+</div>

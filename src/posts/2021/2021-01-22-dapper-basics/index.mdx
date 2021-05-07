@@ -1,0 +1,188 @@
+---
+title: "Dapper explained with simple examples"
+date: 2021-01-22
+published: true
+---
+
+<div>
+
+Dapper is a simple data access library that declares itself as a micro-ORM. Dapper was developed by the StackExchange team. For those who don't know, they are the group that owns and develops StackOverflow and allows the usage of "StackExchange" for a questions and answers tool for things other than programming.
+
+Dapper has two main advantages: simplicity and performance.
+
+Here's a sample of how simple it is to use this library:
+
+    using(var conn = new SqlConnection(ConnectionString))
+    {
+        var sql = "SELECT * FROM Person";
+
+        var personList = conn.Query<Person>(sql).ToList();
+
+        return personList;
+    }
+
+To use the SqlConnection type you'll need to install the following nuget package:
+
+    Install-Package System.Data.SqlClient
+
+## Dapper with Postgres
+
+You can use a NpgsqlConnection for Postgres. All you need to do is install the following package:
+
+    Install-Package Npgsql
+
+And the sample would look like this:
+
+    using(var conn = new NpgsqlConnection(ConnectionString))
+    {
+        var sql = "SELECT * FROM Person";
+
+        var personList = conn.Query<Person>(sql).ToList();
+
+        return personList;
+    }
+
+## Dapper with MySql
+
+For MySql it applies similarly, but you need to install instead.
+    
+    Install-Package MySql.Data
+
+Then the code would look like this:
+
+    using(var conn = new MySqlConnection(ConnectionString))
+    {
+        var sql = "SELECT * FROM Person";
+
+        var personList = conn.Query<Person>(sql).ToList();
+
+        return personList;
+    }
+
+This is a great starter, but undoubtedly you'll have some questions after this. Like for example:
+
+- How do we avoid SQL Injection on more complex queries?
+- How do we do an Insert/Update/Delete with Dapper?
+
+We'll continue assuming we are using SQL Server.
+
+## Avoiding SQL Injection
+
+While it is possible and easy to do this:
+
+    public Person GetPersonById(int id) 
+    {
+        using(var conn = new SqlConnection(ConnectionString))
+        {
+            var sql = $"SELECT * FROM Person WHERE Id={id}";
+
+            var personList = conn.Query<Person>(sql).ToList();
+
+            return personList;
+        }
+    }
+
+It is also very bad, since you are vulnerable to sql injection. If you don't know what sql injection is you can read more about it [here](https://www.w3schools.com/sql/sql_injection.asp).
+
+But the way you can prevent this security hole is the following way:
+
+    public Person GetPersonById(int id) 
+    {
+        using(var conn = new SqlConnection(ConnectionString))
+        {
+            var sql = "SELECT * FROM Person WHERE Id=@id";
+
+            var personList = conn.Query<Person>(sql, new { id }).ToList();
+
+            return personList;
+        }
+    }
+
+If you know enough SQL then you'll recognize that the @ sign is used to preface variables. Why would be use it here?
+
+It is because dapper is helping us by turning the atomic values in our anonymous types into a SQL variable. By doing this, the threat of sql injection is averted.
+    
+## Insert with Dapper
+
+Let us use a simple model class for example purposes:
+
+    public class Person 
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public DateTime BirthDate { get; set; }
+    }
+
+And now the actual insert statement:
+
+    public void InsertPerson(Person person) 
+    {
+        using(var conn = new SqlConnection(ConnectionString))
+        {
+            var sql = "INSERT INTO Person(Id, Name, BirthDate) VALUES(@Id, @Name, @BirthDate)";
+
+            conn.Execute(sql, person);
+        }
+    }
+
+## Update with Dapper
+
+Now the update is also pretty simple too:
+
+    public void UpdatePerson(Person person) 
+    {
+        using(var conn = new SqlConnection(ConnectionString))
+        {
+            var sql = "UPDATE Person SET Name=@Name, BirthDate=@BirthDate) WHERE Id=@Id";
+
+            conn.Execute(sql, person);
+        }
+    }
+
+Once again, we continue using the @ notation to let Dapper create SQL variables and avoid an injection.
+
+## Delete with Dapper
+
+At this point it might be as clear as day, but here is a Delete example:
+
+    public void DeletePerson(int id) 
+    {
+        using(var conn = new SqlConnection(ConnectionString))
+        {
+            var sql = "DELETE Person WHERE Id=@id";
+
+            conn.Execute(sql, new { id });
+        }
+    }
+
+## Return values
+
+If you're used to Entity Framework, you'll probably expect for these functions to return the entity rather than being void. However a point to consider is that you don't really need the returned entity. If the SQL Statement fails, then the operation won't complete. If the operation succeeds then you don't need the return values since you already have the values.
+
+In general, the only cases where you need the return values explicitly is when inserting in a table that has identity columns. I'll show how that is done.
+
+## Insert with Identity
+
+This is an example of how to insert while also getting the inserted Id value.
+
+    public int InsertPerson(Person person) 
+    {
+        using(var conn = new SqlConnection(ConnectionString))
+        {
+            var sql = "INSERT INTO Person(person) OUTPUT INSERTED.Id VALUES (@person)";
+
+            return conn.QuerySingle<int>(sql, person);
+        }
+    }
+
+This last bit of SQL will get you the inserted Id if your Id column is an identity column. We also pass the generic parameter <code>int</code> to indicate that we are expecting the return value as an integer. If you have an identity column with a <code>bigint</code> type, you'd probably prefer to return a <code>long</code> type instead. A <code>System.Guid</code> type can be used for sql server type <code>uniqueidentifier</code>. Other variants exist for postgres and MySQL.
+
+## Summary
+
+So this is a little of how to use dapper with proper examples for the most common operations. If you're used to entity framework like I was when I learned Dapper, you might be both awed at how simple this is, but also how much boilerplate you need to write for simple operations.
+
+In the next article I'll cover how you can increase development speed by using the right dapper extensions.
+
+</div>
