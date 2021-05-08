@@ -1,8 +1,6 @@
 const { createFilePath } = require(`gatsby-source-filesystem`);
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
-    
-    //Get the slugs as metadata.
     const { createNodeField } = actions
 
     if (node.internal.type === `Mdx`) {
@@ -14,8 +12,11 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
             value: `/posts${value}`,
         })
     }
+}
 
-    //Use the MDX files as pages to be embedded in a post-template.
+const path = require("path");
+
+exports.createPages = async ({ graphql, actions, reporter }) => {
     const { createPage } = actions
 
     const result = await graphql
