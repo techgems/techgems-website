@@ -18,7 +18,12 @@ module.exports = {
             purple: colors.violet,
             pink: colors.pink,
         },
-        extend: {}
+        extend: {
+            fontFamily: {
+                header: ["Merriweather Sans"],
+                body: ["Roboto"]
+            }
+        }
     },
     variants: {
         extend: {},
