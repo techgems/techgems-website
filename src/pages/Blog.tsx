@@ -30,6 +30,7 @@ export const query = graphql
 `
 
 const Blog: React.FC<PageProps> = (props: PageProps) => {
+    console.log(props);
     return (
         <div>
             <div>
@@ -38,9 +39,9 @@ const Blog: React.FC<PageProps> = (props: PageProps) => {
             </div>
 
             <div>
-                {props.data.allMdx.nodes.map(({ excerpt, frontmatter }) => (
+                {props.data.allMdx.nodes.map(({ excerpt, frontmatter, fields }) => (
                     <>
-                        <Link to={props.data.fields.slug}>
+                        <Link to={fields.slug}>
                             <h1>{frontmatter.title}</h1>
                         </Link>
                         <p>{frontmatter.date}</p>

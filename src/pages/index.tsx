@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 library.add(fab, faEnvelope);
 
-const Index: React.FC = props => {
+const Index: React.FC<PageProps> = (props: PageProps) => {
   return (
     <main className="bg-red-800 text-white min-h-screen h-full flex flex-col">
       <Navbar />
