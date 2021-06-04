@@ -1,4 +1,5 @@
 import * as React from 'react'
+import Navbar from '../components/blog/navbar';
 import { graphql, PageProps, Link } from 'gatsby'
 
 export const query = graphql
@@ -30,9 +31,9 @@ export const query = graphql
 `
 
 const Blog: React.FC<PageProps> = (props: PageProps) => {
-    console.log(props);
     return (
-        <div>
+        <main>
+            <Navbar />
             <div>
                 <h1>{props.data.site.siteMetadata.title}</h1>
                 <p>{props.data.site.siteMetadata.description}</p>
@@ -50,7 +51,7 @@ const Blog: React.FC<PageProps> = (props: PageProps) => {
                     
                 ))}
             </div>
-        </div>
+        </main>
     )
 };
 
