@@ -5,3 +5,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.tg-post-header {
+    margin-bottom: 0.5rem !important;
+}

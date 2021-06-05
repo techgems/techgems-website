@@ -6,7 +6,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="py-1 h-20 flex justify-around bg-red-900">
       <img src={InvertedLogo} />
-      <div className="my-auto text-lg text-white">
+      <div className="my-auto text-lg text-white font-semibold font-header">
         <Link to="/" className="mx-3 shadow-none hover:text-red-400">
           Home
         </Link>

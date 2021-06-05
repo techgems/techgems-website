@@ -28,23 +28,30 @@ module.exports = {
           css: {
             h1: {
               fontFamily: "Merriweather Sans",
+              color: colors.red["800"]
             },
             h2: {
               fontFamily: "Merriweather Sans",
+              color: colors.red["800"]
             },
             h3: {
               fontFamily: "Merriweather Sans",
+              color: colors.red["800"]
             },
             h4: {
               fontFamily: "Merriweather Sans",
+              color: colors.red["800"]
             },
             p: {
               fontFamily: "Roboto",
             },
+            span: {
+                fontFamily: "Roboto" 
+            },
             a: {
-              color: colors.red["700"],
+              color: colors.red["800"],
               "&:hover": {
-                color: colors.red["600"],
+                color: colors.red["700"],
               }
             },
             "h1 > a": {
