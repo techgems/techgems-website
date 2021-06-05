@@ -3,6 +3,7 @@ module.exports = {
     title: "Tech Gems",
   },
   plugins: [
+    "gatsby-plugin-gatsby-cloud",
     "gatsby-plugin-postcss",
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-mdx",
