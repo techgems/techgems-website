@@ -5,11 +5,14 @@
 //-Cloud
 //-Project/Product Management
 
-import React from "react"
+import React from "react";
+import Navbar from "../components/blog/navbar";
 
 const Categories: React.FC<PageProps> = (props: PageProps) => {
     return (
-        <div></div>
+        <main>
+            <Navbar />
+        </main>
     );
 };
 
