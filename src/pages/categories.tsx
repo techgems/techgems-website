@@ -6,9 +6,11 @@
 //-Project/Product Management
 
 import React from "react";
+import { PageProps } from "gatsby";
 import Navbar from "../components/blog/navbar";
 
 const Categories: React.FC<PageProps> = (props: PageProps) => {
+
     return (
         <main>
             <Navbar />
