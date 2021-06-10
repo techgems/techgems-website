@@ -1,6 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: "Tech Gems",
+    categories: ["Web Development", "Cloud Architecture", "Product Management"]
   },
   plugins: [
     "gatsby-plugin-gatsby-cloud",

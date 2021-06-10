@@ -31,7 +31,8 @@
     "gatsby-source-filesystem": "^3.4.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-helmet": "^6.1.0"
+    "react-helmet": "^6.1.0",
+    "slugify": "^1.5.3"
   },
   "devDependencies": {
     "autoprefixer": "^10.2.5",
