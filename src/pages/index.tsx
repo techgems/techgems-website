@@ -10,9 +10,9 @@ library.add(fab, faEnvelope);
 
 const Index: React.FC<PageProps> = (props: PageProps) => {
   return (
-    <main className="bg-red-800 text-white min-h-screen h-full flex flex-col">
+    <main className="bg-gradient-to-r from-red-800 to-red-500 text-white min-h-screen h-full flex flex-col">
       <Navbar />
-      <div className="flex flex-1">
+      <div className="flex flex-1 ">
         <section className="flex justify-center max-w-lg w-full items-center text-center m-auto">
           <div className="text-center">
             <h1 className="my-4 text-3xl font-extrabold">Carlos Jimenez</h1>
