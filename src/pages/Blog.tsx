@@ -34,12 +34,6 @@ export const query = graphql`
 `;
 
 const Blog: React.FC<PageProps> = (props: PageProps) => {
-  console.log(props);
-  const dateFormatter = (dateString: string) => {
-    let date = new Date(dateString);
-    return date.toDateString();
-  };
-
   return (
     <main>
       <Navbar />
