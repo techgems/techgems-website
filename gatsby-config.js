@@ -1,5 +1,6 @@
 module.exports = {
   siteMetadata: {
+    siteUrl: "https://www.techgems.net",
     title: "Tech Gems",
     categories: ["Web Development", "Cloud Architecture", "Product Management"]
   },
@@ -10,6 +11,7 @@ module.exports = {
     "gatsby-plugin-mdx",
     `gatsby-plugin-sharp`,
     `gatsby-remark-images`,
+    `gatsby-plugin-sitemap`,
     {
       resolve: "gatsby-source-filesystem",
       options: {
@@ -40,6 +42,14 @@ module.exports = {
         name: `posts`,
         path: `${__dirname}/src/posts`,
       },
-    }
+    },
+    {
+      resolve: 'gatsby-plugin-robots-txt',
+      options: {
+        host: 'https://www.techgems.net',
+        sitemap: 'https://www.techgems.com/sitemap.xml',
+        policy: [{ userAgent: '*', allow: '/' }]
+      }
+    },
   ],
 };

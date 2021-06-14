@@ -1,6 +1,7 @@
 import React from "react"
 import Navbar from "../components/home/Navbar"
 import Footer from "../components/home/Footer"
+import BlogHelmet from "../components/blogHelmet";
 import { library } from "@fortawesome/fontawesome-svg-core"
 import { fab } from "@fortawesome/free-brands-svg-icons"
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons"
@@ -11,6 +12,7 @@ library.add(fab, faEnvelope);
 const Index: React.FC<PageProps> = (props: PageProps) => {
   return (
     <main className="bg-gradient-to-r from-red-800 to-red-500 text-white min-h-screen h-full flex flex-col">
+      <BlogHelmet title="Tech Gems" description="Tech Gems is a web and cloud development blog, you'll also find gamification, UI and Product Development." />
       <Navbar />
       <div className="flex flex-1 ">
         <section className="flex justify-center max-w-lg w-full items-center text-center m-auto">
