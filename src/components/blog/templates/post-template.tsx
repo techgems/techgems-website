@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../navbar";
+import BlogContainer from "../blogContainer";
 import { graphql, PageProps } from "gatsby";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 
@@ -19,8 +20,7 @@ const Post: React.FC<PageProps> = (props: PageProps) => {
   const { frontmatter, body } = props.data.mdx;
 
   return (
-    <main>
-      <Navbar />
+    <BlogContainer>
       <article className="mx-auto prose mt-12">
         <h1 className="tg-post-header">
           {frontmatter.title}
@@ -29,7 +29,7 @@ const Post: React.FC<PageProps> = (props: PageProps) => {
       
         <MDXRenderer>{body}</MDXRenderer>
       </article>
-    </main>
+    </BlogContainer>
   );
 };
 

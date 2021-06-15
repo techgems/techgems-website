@@ -1,29 +1,11 @@
 import React from "react";
 import Navbar from "../components/blog/navbar";
-import { useForm } from "react-hook-form";
-
-interface ContactForm {
-  name: string;
-  email: string;
-  description: string;
-}
+import BlogContainer from "../components/blog/blogContainer";
 
 const Contact: React.FC<PageProps> = (props: PageProps) => {
-  const {
-    register,
-    setValue,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ContactForm>();
-  const onSubmit = handleSubmit((data) => console.log(data));
-
-  const labelClass = "block text-sm font-medium text-gray-700 mt-3";
-  const inputClass =
-    "mt-3 p-2 focus:outline-none focus:ring focus:ring-primary-light focus:border-primary block w-full shadow-sm sm:text-sm border border-gray-300 rounded-md";
 
   return (
-    <main>
-      <Navbar />
+    <BlogContainer>
       <section className="max-w-2xl mx-auto mt-12">
         <div className="mt-12 mb-4 mx-auto w-1/2 text-center text-red-800">
           <h1 className="text-4xl font-bold">Contact</h1>
@@ -41,7 +23,7 @@ const Contact: React.FC<PageProps> = (props: PageProps) => {
           
         </p>
       </section>
-    </main>
+    </BlogContainer>
   );
 };
 

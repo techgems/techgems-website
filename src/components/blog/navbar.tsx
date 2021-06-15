@@ -4,10 +4,11 @@ import InvertedLogo from "../../images/logos/techgems-inverted.png";
 import { Link } from "gatsby";
 
 const Navbar: React.FC = () => {
-  
   return (
     <nav className="py-1 h-20 flex justify-around bg-red-900">
-      <img src={InvertedLogo} />
+      <Link to="/" className="my-auto">
+        <img src={InvertedLogo} className="h-16" />
+      </Link>
       <div className="flex my-auto text-lg text-white font-semibold font-header">
         <Link to="/" className="mx-3 shadow-none hover:text-red-400">
           Home

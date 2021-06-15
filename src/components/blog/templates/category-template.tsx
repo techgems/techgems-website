@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../navbar";
+import BlogContainer from "../blogContainer";
 import PostCard from "../postCard";
 import { graphql, PageProps } from "gatsby";
 
@@ -28,8 +29,7 @@ export const query = graphql`
 
 const Category: React.FC<PageProps> = (props: PageProps) => {
   return (
-    <main>
-      <Navbar />
+    <BlogContainer>
       <div className="mt-12 mx-auto w-1/2 text-center text-red-800">
         <h2 className="text-4xl font-bold">{props.pageContext.category}</h2>
       </div>
@@ -56,7 +56,7 @@ const Category: React.FC<PageProps> = (props: PageProps) => {
           );
         })}
       </section>
-    </main>
+    </BlogContainer>
   );
 };
 
