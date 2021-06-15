@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "../navbar";
 import BlogContainer from "../blogContainer";
+import BlogHelmet from "../../blogHelmet";
 import PostCard from "../postCard";
 import { graphql, PageProps } from "gatsby";
 
@@ -30,6 +30,7 @@ export const query = graphql`
 const Category: React.FC<PageProps> = (props: PageProps) => {
   return (
     <BlogContainer>
+      <BlogHelmet title={`Tech Gems - ${props.pageContext.category}`} description={`Blog post category: ${props.pageContext.category}.`} />
       <div className="mt-12 mx-auto w-1/2 text-center text-red-800">
         <h2 className="text-4xl font-bold">{props.pageContext.category}</h2>
       </div>

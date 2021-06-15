@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/blog/navbar";
+import BlogHelmet from "../components/blogHelmet";
 import BlogContainer from "../components/blog/blogContainer";
 import Hero from "../components/blog/hero";
 import PostCard from "../components/blog/postCard";
@@ -37,6 +37,7 @@ export const query = graphql`
 const Blog: React.FC<PageProps> = (props: PageProps) => {
   return (
     <BlogContainer>
+      <BlogHelmet title="Tech Gems - Blog" description="Tech Gems Blog home page." />
       <Hero />
       <div className="mt-12 mx-auto w-1/2 text-center text-red-800">
         <h2 className="text-4xl font-bold">Latest Posts</h2>

@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import Navbar from "../navbar";
+import React from "react";
 import BlogContainer from "../blogContainer";
 import { graphql, PageProps } from "gatsby";
 import { MDXRenderer } from "gatsby-plugin-mdx";
+import BlogHelmet from "../../blogHelmet";
 
 export const query = graphql`
   query PostsByID($id: String!) {
@@ -21,6 +21,7 @@ const Post: React.FC<PageProps> = (props: PageProps) => {
 
   return (
     <BlogContainer>
+      <BlogHelmet title={frontmatter.title} description="A blog post by Tech Gems." />
       <article className="mx-auto prose mt-12">
         <h1 className="tg-post-header">
           {frontmatter.title}
