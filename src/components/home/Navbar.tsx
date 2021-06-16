@@ -7,7 +7,7 @@ const Navbar: React.FC = () => {
         <h1 className="text-xl font-semibold">Carlos Jimenez</h1>
         <div>
           <Link to="/" className="mx-2 shadow-none hover:text-red-400">Home</Link>
-          <Link to="/blog" className="mx-2 shadow-none hover:text-red-400">Blog</Link>
+          <Link to="/latest" className="mx-2 shadow-none hover:text-red-400">Blog</Link>
           <Link to="/contact" className="mx-2 shadow-none hover:text-red-400">Contact</Link>
         </div>
     </nav>

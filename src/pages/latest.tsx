@@ -34,7 +34,7 @@ export const query = graphql`
   }
 `;
 
-const Blog: React.FC<PageProps> = (props: PageProps) => {
+const Latest: React.FC<PageProps> = (props: PageProps) => {
   return (
     <BlogContainer>
       <BlogHelmet title="Tech Gems - Blog" description="Tech Gems Blog home page." />
@@ -69,4 +69,4 @@ const Blog: React.FC<PageProps> = (props: PageProps) => {
   );
 };
 
-export default Blog;
+export default Latest;
