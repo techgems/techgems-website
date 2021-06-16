@@ -3,7 +3,7 @@ import BlogHelmet from "../components/blogHelmet";
 import BlogContainer from "../components/blog/blogContainer";
 import Hero from "../components/blog/hero";
 import PostCard from "../components/blog/postCard";
-import { graphql, PageProps, Link } from "gatsby";
+import { graphql, PageProps } from "gatsby";
 
 export const query = graphql`
   query SITE_INDEX_QUERY {
