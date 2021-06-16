@@ -55,17 +55,17 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   //Create Category pages.
   const categoriesQuery = await graphql(`
-        query {
-            site {
-                siteMetadata {
-                    categories
-                }
-            }
+    query {
+      site {
+        siteMetadata {
+          categories
         }
+      }
+    }
   `);
 
   const categories = categoriesQuery.data.site.siteMetadata.categories;
-  categories.forEach(category  => {
+  categories.forEach(async (category) => {
     createPage({
       path: `category/${slugify(category.toLowerCase())}`,
       component: path.resolve(
@@ -73,5 +73,5 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       ),
       context: { category: category },
     });
-  })
+  });
 };

@@ -12,12 +12,13 @@ export const query = graphql`
         title
         date(formatString: "YYYY MMMM Do")
       }
+      timeToRead
     }
   }
 `;
 
 const Post: React.FC<PageProps> = (props: PageProps) => {
-  const { frontmatter, body } = props.data.mdx;
+  const { frontmatter, body, timeToRead } = props.data.mdx;
 
   return (
     <BlogContainer>
@@ -26,7 +27,7 @@ const Post: React.FC<PageProps> = (props: PageProps) => {
         <h1 className="tg-post-header">
           {frontmatter.title}
         </h1>
-        <span className="text-left text-gray-400">{frontmatter.date}</span>
+        <span className="text-left text-gray-400">{frontmatter.date} • ☕️ {timeToRead} min read</span>
       
         <MDXRenderer>{body}</MDXRenderer>
       </article>

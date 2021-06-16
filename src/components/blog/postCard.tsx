@@ -17,7 +17,7 @@ const PostCard: React.FC<IProps> = (props: IProps) => {
       <h1 className="mb-0">
         <Link to={props.postSlug}>{props.title}</Link>
       </h1>
-      <span className="text-gray-400">{props.date}</span>
+      <span className="text-gray-400">{props.date} • ☕️ {props.timeToRead} min read</span>
       <p>{props.excerpt}</p>
     </div>
   );
