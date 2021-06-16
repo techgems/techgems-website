@@ -13,6 +13,9 @@ const Navbar: React.FC = () => {
         <Link to="/" className="mx-3 shadow-none hover:text-red-400">
           Home
         </Link>
+        <Link to="/blog" className="mx-3 shadow-none hover:text-red-400">
+          Blog
+        </Link>
         <CategoryMenu />
         <Link to="/contact" className="mx-3 shadow-none hover:text-red-400">
           Hire Me
