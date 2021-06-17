@@ -32,9 +32,9 @@ const Contact: React.FC<PageProps> = (props: PageProps) => {
         <p className="text-gray-700 mx-auto text-base font-body leading-relaxed mb-6">
           If you're interested in the services I have to offer you can contact
           me through my email:{" "}
-          <a className="text-red-800" href="mailto:cjimenezber@gmail.com">cjimenezber@gmail.com</a>, you
-          can also check my <a className="text-red-800" href="https://github.com/techgems">Github</a> and{" "}
-          <a className="text-red-800" href="https://www.linkedin.com/in/carlos-jimenez-61a926b7/">
+          <a className="text-red-800 font-semibold" href="mailto:cjimenezber@gmail.com">cjimenezber@gmail.com</a>, you
+          can also check my <a className="text-red-800 font-semibold" href="https://github.com/techgems">Github</a> and{" "}
+          <a className="text-red-800 font-semibold" href="https://www.linkedin.com/in/carlos-jimenez-61a926b7/">
             Linked In
           </a>
         </p>
