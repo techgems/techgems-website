@@ -4,4 +4,4 @@ This is the repository for my Gatsby blog called Tech Gems. It is a very simple 
 
 So I took the masochist route of writing my own Gatsby blog site from scratch to achieve complete independence from anyone else's styles.
 
-Feel free to use this as a template if like me, you're looking for a blog starter using Tailwind as a base.
+Feel free to use this as a template if like me, you're looking for a blog starter using Tailwind as a base. You can preview the original website [here](https://techgems.net).
