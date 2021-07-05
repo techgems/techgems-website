@@ -17,9 +17,9 @@ const Index: React.FC<PageProps> = (props: PageProps) => {
       <div className="flex flex-1 ">
         <section className="flex justify-center max-w-lg w-full items-center text-center m-auto">
           <div className="text-center">
-            <h1 className="my-4 text-3xl font-extrabold">Carlos Jimenez</h1>
-            <h2 className="my-2 text-lg font-light">
-              Full Stack Web Developer, Freelancer and Tech Blogger
+            <h1 className="my-4 text-2xl md:text-3xl font-extrabold font-header">Carlos Jimenez</h1>
+            <h2 className="my-2 text-md md:text-lg font-light font-body">
+              Full Stack Web Developer, Freelancer and Writer of the Tech Gems Blog.
             </h2>
             <ul className="mt-8">
               <li className="inline-block mx-2">

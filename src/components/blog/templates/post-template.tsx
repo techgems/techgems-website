@@ -23,7 +23,7 @@ const Post: React.FC<PageProps> = (props: PageProps) => {
   return (
     <BlogContainer>
       <BlogHelmet title={frontmatter.title} description="A blog post by Tech Gems." />
-      <article className="mx-auto prose mt-12">
+      <article className="prose mt-12 mx-8 md:mx-auto">
         <h1 className="tg-post-header">
           {frontmatter.title}
         </h1>

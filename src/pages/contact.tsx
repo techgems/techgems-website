@@ -9,7 +9,7 @@ const Contact: React.FC<PageProps> = (props: PageProps) => {
         title="Tech Gems - Contact"
         description="Tech Gems page with contact information to the author."
       />
-      <section className="max-w-2xl mx-auto mt-12">
+      <section className="max-w-2xl mx-6 md:mx-auto mt-12">
         <div className="mt-12 mb-4 mx-auto w-1/2 text-center text-red-800">
           <h1 className="text-4xl font-bold">Contact</h1>
         </div>

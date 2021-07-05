@@ -42,14 +42,14 @@ const Latest: React.FC<PageProps> = (props: PageProps) => {
       <div className="mt-12 mx-auto w-1/2 text-center text-red-800">
         <h2 className="text-4xl font-bold">Latest Posts</h2>
       </div>
-      <section className="grid grid-cols-2 mt-6 mx-52">
+      <section className="lg:grid lg:grid-cols-2 mt-6 lg:mx-52 mx-8 sm:mx-16">
         {props.data.allMdx.nodes.map((item, index) => {
           const { fields, frontmatter, excerpt, timeToRead } = item;
           let marginClass = "";
           if (index % 2 === 0) {
-            marginClass = "mr-6";
+            marginClass = "lg:mr-6";
           } else {
-            marginClass = "ml-6";
+            marginClass = "lg:ml-6";
           }
 
           return (
