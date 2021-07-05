@@ -11,9 +11,6 @@ const Navbar: React.FC = () => {
             <img src={InvertedLogo} className="h-16" />
           </Link>
           <div className="my-auto font-header">
-            <Link to="/" className="mx-2 shadow-none hover:text-red-400">
-              Home
-            </Link>
             <Link to="/latest" className="mx-2 shadow-none hover:text-red-400">
               Blog
             </Link>
