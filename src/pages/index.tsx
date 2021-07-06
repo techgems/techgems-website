@@ -16,7 +16,7 @@ const Index: React.FC<PageProps> = (props: PageProps) => {
       <Navbar />
       <div className="flex flex-1 ">
         <section className="flex justify-center max-w-lg w-full items-center text-center m-auto">
-          <div className="text-center">
+          <div className="text-center mx-3 md:mx-0">
             <h1 className="my-4 text-2xl md:text-3xl font-extrabold font-header">Carlos Jimenez</h1>
             <h2 className="my-2 text-md md:text-lg font-light font-body">
               Full Stack Web Developer, Freelancer and Writer of the Tech Gems Blog.
