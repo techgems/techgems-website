@@ -65,6 +65,9 @@ module.exports = {
             },
             "h4 > a": {
                 textDecoration: "none"
+            },
+            "ul > li": {
+              fontFamily: "Roboto"
             }
           },
         },
