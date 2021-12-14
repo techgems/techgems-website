@@ -1,0 +1,80 @@
+---
+title: "How to build rich web UIs with ASP.NET Core MVC"
+date: 2021-12-12
+published: true
+category: "Web Development"
+---
+
+React (and Single Page Applications) have taken over the world, and even if you're the most avid hater of Javascript, there's no denying that more Javascript in the world, not less, has advanced user experiences to the point that now everyone expects a more snappy, reactive experience even from websites that don't need it as much as others.
+
+This has caused a massive shift in new applications and teams embracing the complexity of the modern web, with all of it's pros and cons.
+
+Most teams that want to join into the hype and offer better UX in their websites end up in a predicament in which all of the sudden they are pushed into this world of Javascript module systems, frameworks, bundling and more that they never had to do before. Don't get me wrong, single page applications are great, but to master them, a new team embracing them needs a set of skills that is highly coveted and often not easily found.
+
+## The Javascript Solution
+
+Because this ecosystem was born in JS, of course the first answers to it's downsides came from it. SPAs suck with SEO? Use SSR (NextJS), need cheap hosting for a small/medium website that also needs good SEO? Use Gatsby or Astro.
+
+These are great tools, but they force you to use the JS ecosystem which is of course not everyone's cup of tea. So many companies in the search of better UX and higher quality products end up forced to embrace more JS into their tooling, whether they like it or not.
+
+## If you can't beat them, join them
+
+If you read the title of this post, you might be a bit confused, isn't the post going to talk about ASP.NET Core? Why am I being told to switch to node instead?
+
+The truth is, you can use Javascript to write less Javascript. If your team or app already have successfully embraced SPAs, then this might not sound too exciting, but if you're still on the fence, or you're thinking of migrating an old MVC site because the user experience is just not good anymore, then you should know about these tools.
+
+
+We need tools that allow us to make our MVC pages interactive, but we don't want Webpack, nor do we want to get rid of our razor generated HTML.
+
+We don't want jQuery either, since we don't want refactoring nightmares triggering our PTSD on the time we changed an id we weren't meant to change. Or fearing to change some measly markup because it might break some complex interaction. We want SOLID software, not fragile software.
+
+## HTMX and AlpineJS
+
+### AlpineJS
+
+[AlpineJS](https://alpinejs.dev/) is a small JS library that seeks to replace jQuery as the de-facto ruler in server rendered apps that need a little bit of client interaction. When using it, you're still using Javascript, but it's a declarative, not imperative, which will reduce the amount of JS you write for modals, custom dropdowns, toasts or any other interaction that needs to live in the client only.
+
+    <div x-data="{ open: false }">
+        <button @click="open = true">Expand</button>
+ 
+        <span x-show="open">
+            Content...
+        </span>
+    </div>
+
+Any state that you need into your HTML you can put it inside an x-data attribute, you can use a JS function or a plain inline object. It's great because this way it's very easy to create tag helpers with HTML that has interactions out of the box in the client.
+
+### HTMX
+
+AlpineJS is great, but it offers little in the way of avoiding the necessity of constantly refreshing the page, which is the main reason why writing MVC apps with snappy interactions is so hard in the first place.
+
+Meet [HTMX](https://htmx.org/), HTMX is a tool that allows you to declaratively allow HTML elements to send an asynchronous request. Meaning that your plain-old MVC form can fetch partial HTML and inject it rather than a full refresh each time.
+
+    <form hx-post="/postRoute" hx-swap="outerHTML">
+        <input name="id" type="text" />
+        <button type="submit">Submit form with Ajax</button>
+    </form>
+
+The previous example will turn a form request into an asynchronous POST request, which will replace the element with the result of the request. When paired with:
+
+    [HttpPost]
+    [Route("/postRoute")]
+    public async Task<IActionResult> PostRoute([FromBody] int id)
+    {
+        //Validation and processing here.
+
+        //Use Partial View, not full HTML page.
+        return PartialView("../Partials/Example", id);
+    }
+
+You can very powerfully add client to server interactions that don't demand JS, but that leverage the server's capacity to pre-render your HTML.
+
+It doesn't just work on forms though, it also allows you to easily send requests from _any_ html element we want and customize where we want the partial HTML to go. 
+
+While their development teams are not related, these libraries compliment one another very well. And allow you to easily build a snappy UI that is familiar to backend developers that don't like dealing with JS and also happens to feel fresh and modern in the way that it feels.
+
+## Conclusion
+
+This approach is one I found recently since I was told by a client that they didn't want a SPA, but a normal MVC app. But my years of building well crafted and reactive UI forced me to look for alternatives that had synergy with MVC, but still allowed a high quality end result.
+
+I'm still learning about it, but I thought it'd be useful to write about this alternative since it's blown my mind with it's simplicity. I'll be writing more concrete use cases about it in the future.

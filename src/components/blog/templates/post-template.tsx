@@ -17,7 +17,8 @@ export const query = graphql`
   }
 `;
 
-const Post: React.FC<PageProps> = (props: PageProps) => {
+//Should define frontmatter type.
+const Post: React.FC<PageProps> = (props: PageProps<any>) => {
   const { frontmatter, body, timeToRead } = props.data.mdx;
 
   return (
